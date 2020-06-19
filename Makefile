@@ -1,2 +1,2 @@
 all:
-	docker build . -t nhnghia/esp-open-sdk
+	docker build . -t wuyue/esp-open-sdk

@@ -16,18 +16,17 @@ RUN apt-get update && apt-get install -y \
 RUN su docker -c " \
     git clone --recursive https://github.com/pfalcon/esp-open-sdk.git /build/esp-open-sdk ; \
     cd /build/esp-open-sdk ; \
-    make STANDALONE=n ; \
+    make STANDALONE=y ; \
 "
 
 
 #step 2: copy result to new docker image => reduce the image's size
 FROM ubuntu:16.04
 
-RUN apt-get update && apt-get install -y make python python-serial
+RUN apt-get update \
+	&& apt-get install -y make python python-serial python3 gcc \
+	&& rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /build/esp-open-sdk/xtensa-lx106-elf /opt/xtensa-lx106-elf
 
 ENV PATH /opt/xtensa-lx106-elf/bin:$PATH
-
-WORKDIR /data
-VOLUME ["/data"]
